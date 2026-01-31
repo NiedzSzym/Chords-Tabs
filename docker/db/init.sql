@@ -66,3 +66,6 @@ CREATE TABLE chords_for_songs (
     chord_id INTEGER REFERENCES chords(id) ON DELETE CASCADE,
     PRIMARY KEY (song_id, chord_id)
 );
+
+INSERT INTO roles (name) VALUES ('admin');
+INSERT INTO roles (name) VALUES ('user');

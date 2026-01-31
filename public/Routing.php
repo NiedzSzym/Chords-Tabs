@@ -8,6 +8,10 @@ class Routing {
             'controller' => "SecurityController",
             'action' => 'login'
         ],
+        'logout' => [
+            'controller' => "SecurityController",
+            'action' => 'logout'
+        ],
         'register' => [
             'controller' => "SecurityController",
             'action' => 'register'
@@ -16,11 +20,14 @@ class Routing {
             'controller' => "SecurityController",
             'action' => 'dashboard'
         ]
+
     ];
 
     public static function run(string $path) {
         switch ($path) {
+            case 'dashboard':
             case 'register':
+            case 'logout':
             case 'login':
                 $controller = Routing::$routes[$path]['controller'];
                 $action = Routing::$routes[$path]['action'];

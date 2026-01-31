@@ -20,14 +20,13 @@ class SecurityController extends AppController {
         $user = $userRepository->getUserByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {
-            return $this->render('login', ['messages' => 'Wrong password']);
+            return $this->render('login', ['messages' => ['Wrong password']]);
         }
 
         session_regenerate_id(true);
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_firstname'] = $user['firstname'];
         $_SESSION['is_logged_in'] = true;
 
         $url = "http://$_SERVER[HTTP_HOST]";
@@ -77,11 +76,40 @@ class SecurityController extends AppController {
         return $this->render('login', ['messages' => ['Zarejestrowano pomyślnie!']]);
     }
 
-    public function dashboard() {
-    if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-        header("Location: /login");
-        exit;
+    public function logout() 
+    { 
+
+        if (session_status() === PHP_SESSION_NONE) { 
+            session_start(); 
+        } 
+
+        $_SESSION = []; 
+    
+        if (ini_get("session.use_cookies")) { 
+            $params = session_get_cookie_params(); 
+            setcookie( 
+                session_name(), 
+                '', 
+                time() - 42000, 
+                $params["path"], 
+                $params["domain"], 
+                $params["secure"], 
+                $params["httponly"] 
+            ); 
+        } 
+    
+
+        session_destroy(); 
+
+        $url = "http://$_SERVER[HTTP_HOST]"; 
+        header("Location: {$url}/login"); 
     }
-    echo "Witaj, Twój email to: " . $_SESSION['user_email'];
-}
+
+    public function dashboard() {
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+            header("Location: /login");
+            exit;
+        }
+        return $this->render('dashboard', ['email' => $_SESSION['user_email']]);
+    }
 }

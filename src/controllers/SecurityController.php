@@ -3,11 +3,13 @@
 require_once 'AppController.php';
 require_once __DIR__.'/../model/User.php';
 require_once __DIR__.'/../repository/UserRepository.php';
+require_once __DIR__.'/../middleware/AllowedMethods.php';
 
 class SecurityController extends AppController {
     public function __construct() {
     }
 
+    #[AllowedMethods(['POST', 'GET'])]
     public function login() {
         if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
         return $this->render('login', ['messages' => ['HTTPS is required']]);
@@ -37,7 +39,8 @@ class SecurityController extends AppController {
         var_dump($email, $password);
         exit;
     }
-
+    
+    #[AllowedMethods(['POST', 'GET'])]
     public function register() {
         if (!$this->isPost()) {
             return $this->render('register');
@@ -75,9 +78,10 @@ class SecurityController extends AppController {
             // Obsługa innych błędów (np. logowanie błędu i ogólny komunikat)
             return $this->render('register', ['messages' => ["Wystąpił nieoczekiwany błąd $errorCode"]]);
         }
-        return $this->render('login', ['messages' => ['Zarejestrowano pomyślnie!']]);
+        return $this->render('login', ['messages' => ['Zarejestrowano pomyślnie!']]); 
     }
-
+    
+    #[AllowedMethods(['POST', 'GET'])]
     public function logout() 
     { 
 

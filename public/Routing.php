@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../src/controllers/SecurityController.php';
+require_once __DIR__ . '/../src/attributes/Options.php';
 
 class Routing {
     public static $routes = [
@@ -24,21 +25,19 @@ class Routing {
     ];
 
     public static function run(string $path) {
-        switch ($path) {
-            case 'dashboard':
-            case 'register':
-            case 'logout':
-            case 'login':
-                $controller = Routing::$routes[$path]['controller'];
-                $action = Routing::$routes[$path]['action'];
-
-                $controllerObj = new $controller;
-                $controllerObj->$action();
-                break;
-            default:
-                include __DIR__ . '/../public/views/404.html';
-                break;
+        // Sprawdzamy czy ścieżka istnieje
+        if (!array_key_exists($path, self::$routes)) {
+             include __DIR__ . '/../public/views/404.html';
+             return;
         }
-        
+
+        $controllerName = self::$routes[$path]['controller'];
+        $action = self::$routes[$path]['action'];
+
+        $object = new $controllerName;
+
+        checkRequestAllowed($object, $action);
+
+        $object->$action();
     }
 }

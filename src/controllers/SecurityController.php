@@ -12,14 +12,18 @@ class SecurityController extends AppController {
     #[AllowedMethods(['POST', 'GET'])]
     public function login() {
         if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
-        return $this->render('login', ['messages' => ['HTTPS is required']]);
-    }
+            return $this->render('login', ['messages' => ['HTTPS is required']]);
+        }   
 
+        if (!$this->isPost()) {
+            $this->generateCsrf();
+            return $this->render("login", ['csrf' => $_SESSION['csrf']]);;
+        }
 
-        if($this->isGet()) {
-            return $this->render("login");
-        } 
-
+        if (!isset($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
+            return $this->render('login', ['messages' => ['Session has been terminated or CSRF error.']]);
+        }
+        
         $email = $_POST["email"] ?? '';
         $password = $_POST["password"] ?? '';
 
@@ -36,14 +40,22 @@ class SecurityController extends AppController {
         $_SESSION['is_logged_in'] = true;
 
         header("Location: /dashboard");
-        var_dump($email, $password);
         exit;
+        
     }
     
     #[AllowedMethods(['POST', 'GET'])]
     public function register() {
+        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
+            return $this->render('register', ['messages' => ['HTTPS is required']]);
+        } 
         if (!$this->isPost()) {
-            return $this->render('register');
+            $this->generateCsrf();
+            return $this->render("register", ['csrf' => $_SESSION['csrf']]);;
+        }
+
+        if (!isset($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
+            return $this->render('register', ['messages' => ['Session has been terminated or CSRF error.']]);
         }
 
         $email = $_POST["email"] ?? '';
@@ -69,18 +81,15 @@ class SecurityController extends AppController {
         try {
             UserRepository::getInstance()->addUser($user);
         } catch (Exception $e) {
-            // Obsługa błędu, np. gdy e-mail jest już zajęty
-            // Sprawdzenie kodu błędu PostgreSQL dla duplikatu (23505)
             $errorCode =$e->getMessage();
             if ($e->getCode() == '23505') {
-                return $this->render('register', ['messages' => ['Użytkownik o takim e-mailu już istnieje!']]);
+                return $this->render('register', ['messages' => ['Wrong password or email']]);
             }
-            // Obsługa innych błędów (np. logowanie błędu i ogólny komunikat)
-            return $this->render('register', ['messages' => ["Wystąpił nieoczekiwany błąd $errorCode"]]);
+            return $this->render('register', ['messages' => ["Unknown error: $errorCode"]]);
         }
-        return $this->render('login', ['messages' => ['Zarejestrowano pomyślnie!']]); 
+        return $this->render('login', ['messages' => ['You\'ve been registered!']]); 
     }
-    
+
     #[AllowedMethods(['POST', 'GET'])]
     public function logout() 
     { 
@@ -106,7 +115,6 @@ class SecurityController extends AppController {
     
 
         session_destroy(); 
-
         header("Location: /login");
     }
 

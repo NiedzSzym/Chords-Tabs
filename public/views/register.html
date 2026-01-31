@@ -12,6 +12,7 @@
                 foreach($messages as $message) { echo $message; }
             } ?>
         </div>
+        <input type="hidden" name="csrf" value="<?= $_SESSION['csrf']; ?>">
         <input name="email" type="email" placeholder="email@email.com" required>
         <input name="password1" type="password" placeholder="hasło" required>
         <input name="password2" type="password" placeholder="powtórz hasło" required>

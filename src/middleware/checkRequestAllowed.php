@@ -2,7 +2,7 @@
 
 require_once 'AllowedMethods.php';
 
-function checkRequestAllowed($controller, $methodName) {
+function CheckRequestAllowed($controller, $methodName) {
     $reflection = new ReflectionMethod($controller, $methodName);
     
     // Pobieramy atrybuty typu AllowedMethods

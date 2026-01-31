@@ -44,4 +44,17 @@ class AppController {
         } 
     } 
 
+    protected function generateCsrf(): string 
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (empty($_SESSION['csrf'])) {
+            $_SESSION['csrf'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf'];
+    }
+
 }

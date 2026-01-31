@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../src/controllers/SecurityController.php';
 require_once __DIR__ . '/../src/attributes/Options.php';
+require_once __DIR__ . '/../src/middleware/CheckRequestAllowed.php';
 
 class Routing {
     public static $routes = [

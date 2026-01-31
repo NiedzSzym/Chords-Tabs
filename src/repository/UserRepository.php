@@ -35,13 +35,12 @@ class UserRepository extends Repository {
 
             $stmt->execute([
                 $user->getEmail(),
-                password_hash($user->getPassword(), PASSWORD_BCRYPT), // Bezpieczeństwo [cite: 4]
+                $user->getPassword(),
                 $user->getRole()
             ]);
 
             $userId = $stmt->fetch()['id'];
 
-            // 2. Dodanie do tabeli user_profiles (Relacja 1:1) [cite: 5, 25]
             $stmt = $db->prepare('
                 INSERT INTO user_profiles (id_user, nickname)
                 VALUES (?, ?)

@@ -24,14 +24,24 @@ class SecurityController extends AppController {
             return $this->render('login', ['messages' => ['Session has been terminated or CSRF error.']]);
         }
         
+        $failures = $_SESSION['login_failures'] ?? 0;
+
+        if ($failures > 5) {
+            sleep(2);
+        }
+
         $email = $_POST["email"] ?? '';
         $password = $_POST["password"] ?? '';
+        if (strlen($email) > 100) return $this->render("login", ["messages" => ["Invalid input length"]]);
 
         $user = UserRepository::getInstance()->getUserByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {
+            $_SESSION['login_failures'] = $failures + 1;
             return $this->render('login', ['messages' => ['Wrong password']]);
         }
+
+        unset($_SESSION['login_failures']);
 
         session_regenerate_id(true);
 
@@ -63,6 +73,9 @@ class SecurityController extends AppController {
         $password2 = $_POST["password2"] ?? '';
         $nickname = $_POST['nickname'];
 
+        if(strlen($password1) < 8)  return $this->render("register", ["messages" => ["Password is to weak"]]);
+        if (strlen($email) > 100) return $this->render("register", ["messages" => ["Invalid input length"]]);
+
         if (empty($email) || empty($password1) || empty($password2) || empty($nickname)) {
             return $this->render('register', ['messages' => ['Fill all fields']]);
         }
@@ -75,15 +88,15 @@ class SecurityController extends AppController {
             return $this->render('register', ['messages' => ['Invalid email format!']]);
         }
 
-
-        $user = new User($email, $password1, $nickname);
+        $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
+        $user = new User($email, $hashedPassword, $nickname);
 
         try {
             UserRepository::getInstance()->addUser($user);
         } catch (Exception $e) {
             $errorCode =$e->getMessage();
             if ($e->getCode() == '23505') {
-                return $this->render('register', ['messages' => ['Wrong password or email']]);
+                return $this->render('register', ['messages' => ['If there is user with that email, message with instruction has been send.']]);
             }
             return $this->render('register', ['messages' => ["Unknown error: $errorCode"]]);
         }
@@ -94,9 +107,7 @@ class SecurityController extends AppController {
     public function logout() 
     { 
 
-        if (session_status() === PHP_SESSION_NONE) { 
-            session_start(); 
-        } 
+        $this->initSession();
 
         $_SESSION = []; 
     

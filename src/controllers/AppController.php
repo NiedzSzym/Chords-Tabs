@@ -33,9 +33,7 @@ class AppController {
 
     protected function requireLogin() 
     { 
-        if (session_status() === PHP_SESSION_NONE) { 
-            session_start(); 
-        } 
+        $this->initSession();
     
         if (empty($_SESSION['user_id'])) { 
             $url = "http://$_SERVER[HTTP_HOST]"; 
@@ -44,17 +42,23 @@ class AppController {
         } 
     } 
 
-    protected function generateCsrf(): string 
+    protected function generateCsrf(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        $this->initSession();
 
         if (empty($_SESSION['csrf'])) {
             $_SESSION['csrf'] = bin2hex(random_bytes(32));
         }
-
-        return $_SESSION['csrf'];
     }
 
+
+    protected function initSession() 
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params(['httponly' => true]);
+            session_set_cookie_params(['secure' => true]);
+            session_set_cookie_params(['samesite' => 'Strict']);
+            session_start();
+        }
+    }
 }

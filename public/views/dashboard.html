@@ -6,7 +6,7 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <p>Your email is <?= $email; ?></p>
+    <p>Your email is <?= htmlspecialchars($email); ?></p>
     <a href="/logout">Logout</a>
 </body>
 </html>

@@ -11,102 +11,57 @@ class SecurityController extends AppController {
 
     #[AllowedMethods(['POST', 'GET'])]
     public function login() {
-        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
-            return $this->render('login', ['messages' => ['HTTPS is required']]);
-        }   
-
-        if (!$this->isPost()) {
-            $this->generateCsrf();
-            return $this->render("login", ['csrf' => $_SESSION['csrf']]);;
+        $response = $this->handleInitialRequest('login');
+        if ($response) {
+            return $response;
         }
-
-        if (!isset($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
-            return $this->render('login', ['messages' => ['Session has been terminated or CSRF error.']]);
-        }
-        
-        $failures = $_SESSION['login_failures'] ?? 0;
-
-        if ($failures > 5) {
-            sleep(2);
-        }
+        $this->applyLoginThrottling(); 
 
         $email = $_POST["email"] ?? '';
         $password = $_POST["password"] ?? '';
-        if (strlen($email) > 100) return $this->render("login", ["messages" => ["Invalid input length"]]);
+
+        if (!$this->isValidLoginInput($email)) {
+            return $this->render("login", ["messages" => ["Invalid input"]]);
+        }
 
         $user = UserRepository::getInstance()->getUserByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {
-            $_SESSION['login_failures'] = $failures + 1;
-            return $this->render('login', ['messages' => ['Wrong password']]);
+            $this->incrementLoginFailures();
+            return $this->render('login', ['messages' => ['Wrong email or password']]);
         }
 
-        unset($_SESSION['login_failures']);
-
-        session_regenerate_id(true);
-
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_email'] = $user['email'];
-        $_SESSION['is_logged_in'] = true;
-
-        header("Location: /dashboard");
-        exit;
-        
+        $this->handleLoginSuccess($user);
     }
     
     #[AllowedMethods(['POST', 'GET'])]
     public function register() {
-        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
-            return $this->render('register', ['messages' => ['HTTPS is required']]);
-        } 
-        if (!$this->isPost()) {
-            $this->generateCsrf();
-            return $this->render("register", ['csrf' => $_SESSION['csrf']]);;
+        $response = $this->handleInitialRequest('register');
+        if ($response) {
+            return $response; 
         }
-
-        if (!isset($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
-            return $this->render('register', ['messages' => ['Session has been terminated or CSRF error.']]);
-        }
-
         $email = $_POST["email"] ?? '';
-        $password1 = $_POST["password1"] ?? '';
-        $password2 = $_POST["password2"] ?? '';
-        $nickname = $_POST['nickname'];
+        $passwordCmd = $_POST["password1"] ?? '';
+        $passwordRepeat = $_POST["password2"] ?? '';
+        $nickname = $_POST['nickname'] ?? '';
 
-        if(strlen($password1) < 8)  return $this->render("register", ["messages" => ["Password is to weak"]]);
-        if (strlen($email) > 100) return $this->render("register", ["messages" => ["Invalid input length"]]);
-
-        if (empty($email) || empty($password1) || empty($password2) || empty($nickname)) {
-            return $this->render('register', ['messages' => ['Fill all fields']]);
+        $validationError = $this->validateRegistrationInput($email, $passwordCmd, $passwordRepeat, $nickname);
+        if ($validationError) {
+            return $this->render('register', ['messages' => [$validationError]]);
         }
-
-        if ($password1 !== $password2) {
-            return $this->render('register', ['messages' => ['Password aren\' the same']]);
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->render('register', ['messages' => ['Invalid email format!']]);
-        }
-
-        $hashedPassword = password_hash($password1, PASSWORD_BCRYPT);
-        $user = new User($email, $hashedPassword, $nickname);
 
         try {
-            UserRepository::getInstance()->addUser($user);
+            $this->registerNewUser($email, $passwordCmd, $nickname);
+            
+            return $this->render('login', ['messages' => ['Registration successful! Please login.']]);
+            
         } catch (Exception $e) {
-            $errorCode =$e->getMessage();
-            if ($e->getCode() == '23505') {
-                return $this->render('register', ['messages' => ['If there is user with that email, message with instruction has been send.']]);
-            }
-            return $this->render('register', ['messages' => ["Unknown error: $errorCode"]]);
+            return $this->handleRegistrationError($e);
         }
-        return $this->render('login', ['messages' => ['You\'ve been registered!']]); 
     }
 
     #[AllowedMethods(['POST', 'GET'])]
-    public function logout() 
-    { 
-
+    public function logout() { 
         $this->initSession();
 
         $_SESSION = []; 
@@ -124,7 +79,7 @@ class SecurityController extends AppController {
             ); 
         } 
     
-
+        session_unset();    
         session_destroy(); 
         header("Location: /login");
     }
@@ -135,5 +90,84 @@ class SecurityController extends AppController {
             exit;
         }
         return $this->render('dashboard', ['email' => $_SESSION['user_email']]);
+    }
+
+    private function verifyCsrfToken(): bool { return isset($_POST['csrf']) && $_POST['csrf'] === ($_SESSION['csrf'] ?? ''); }
+
+    private function applyLoginThrottling(): void {
+        $failures = $_SESSION['login_failures'] ?? 0;
+        if ($failures > 5) {
+            sleep(2);
+        }
+    }
+
+    private function incrementLoginFailures(): void {$_SESSION['login_failures'] = ($_SESSION['login_failures'] ?? 0) + 1;}
+    
+    private function isValidLoginInput(string $email): bool { return strlen($email) <= 100;}
+
+    private function handleLoginSuccess(array $user): void {
+        unset($_SESSION['login_failures']);
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['is_logged_in'] = true;
+        header("Location: /dashboard");
+        exit;
+    }
+    
+    private function validateRegistrationInput(string $email, string $p1, string $p2, string $nick): ?string {
+        if (empty($email) || empty($p1) || empty($p2) || empty($nick)) {
+            return 'Fill all fields';
+        }
+        if ($p1 !== $p2) {
+            return 'Passwords are not the same';
+        }
+        if (strlen($p1) < 8) {
+            return 'Password is too weak (min 8 chars)';
+        }
+        if (strlen($email) > 100) {
+            return 'Email is too long';
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return 'Invalid email format!';
+        }
+
+        return null;
+    }
+
+    private function registerNewUser(string $email, string $password, string $nickname): void 
+    {
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $user = new User($email, $hashedPassword, $nickname);
+        UserRepository::getInstance()->addUser($user);
+    }
+
+    private function handleRegistrationError(Exception $e) 
+    {
+        if ($e->getCode() == '23505') {
+            return $this->render('register', ['messages' => ['Email already exists!']]);
+        }
+
+        error_log($e->getMessage());
+        return $this->render('register', ['messages' => ["An unexpected error occurred."]]);
+    }
+
+    private function handleInitialRequest(string $viewName)
+    {
+        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
+            $this->render('login', ['messages' => ['HTTPS is required']]);
+            return false;
+        }
+
+        if ($this->isGet()) {
+            $this->generateCsrf();
+            return $this->render($viewName, ['csrf' => $_SESSION['csrf']]);
+        }
+
+        if (!$this->verifyCsrfToken()) {
+            return $this->render($viewName, ['messages' => ['Session error (CSRF).']]);
+        }
+
+        return null;
     }
 }

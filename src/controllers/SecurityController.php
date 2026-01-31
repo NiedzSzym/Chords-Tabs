@@ -9,6 +9,11 @@ class SecurityController extends AppController {
     }
 
     public function login() {
+        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
+        return $this->render('login', ['messages' => ['HTTPS is required']]);
+    }
+
+
         if($this->isGet()) {
             return $this->render("login");
         } 
@@ -16,8 +21,7 @@ class SecurityController extends AppController {
         $email = $_POST["email"] ?? '';
         $password = $_POST["password"] ?? '';
 
-        $userRepository = new UserRepository();
-        $user = $userRepository->getUserByEmail($email);
+        $user = UserRepository::getInstance()->getUserByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {
             return $this->render('login', ['messages' => ['Wrong password']]);
@@ -29,8 +33,7 @@ class SecurityController extends AppController {
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['is_logged_in'] = true;
 
-        $url = "http://$_SERVER[HTTP_HOST]";
-        header("Location: {$url}/dashboard");
+        header("Location: /dashboard");
         var_dump($email, $password);
         exit;
     }
@@ -54,15 +57,14 @@ class SecurityController extends AppController {
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->render('register', ['messages' => ['Błędny format adresu e-mail!']]);
+            return $this->render('register', ['messages' => ['Invalid email format!']]);
         }
 
 
         $user = new User($email, $password1, $nickname);
-        $userRepository = new UserRepository();
 
         try {
-            $userRepository->addUser($user);
+            UserRepository::getInstance()->addUser($user);
         } catch (Exception $e) {
             // Obsługa błędu, np. gdy e-mail jest już zajęty
             // Sprawdzenie kodu błędu PostgreSQL dla duplikatu (23505)
@@ -101,8 +103,7 @@ class SecurityController extends AppController {
 
         session_destroy(); 
 
-        $url = "http://$_SERVER[HTTP_HOST]"; 
-        header("Location: {$url}/login"); 
+        header("Location: /login");
     }
 
     public function dashboard() {

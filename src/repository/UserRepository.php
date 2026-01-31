@@ -4,7 +4,10 @@ require_once 'Repository.php'; // Stwórz pustą klasę Repository rozszerzając
 require_once __DIR__.'/../model/User.php';
 
 class UserRepository extends Repository {
-
+    private static $instance;
+    public static function getInstance() {
+        return self::$instance ??= new UserRepository();
+    }
     // Pobieranie jednego użytkownika po emailu (np. do logowania)
     public function getUserByEmail(string $email) {
         $stmt = $this->database->connect()->prepare('

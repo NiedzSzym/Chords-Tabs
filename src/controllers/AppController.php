@@ -1,34 +1,57 @@
 <?php
 
-
 class AppController {
 
     protected function isGet(): bool
     {
         return $_SERVER['REQUEST_METHOD'] === 'GET';
     }
+
     protected function isPOST(): bool
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
-    protected function render(string $template = null, array $variables = [])
-    {
-        $templatePath = __DIR__.'/../../public/views/'. $template.'.html';
-        $templatePath404 = __DIR__.'/../../public/views/404.html';
-        $output = "";
-                 
+
+    protected function render(string $template = null, array $variables = []) {
+        $templatePath = __DIR__ . '/../../public/views/' . $template . '.html';
+        $output = 'File not found';
+        
+
+        $this->initSession();
+        if (!isset($variables['csrf']) && isset($_SESSION['csrf'])) {
+            $variables['csrf'] = $_SESSION['csrf'];
+        }
+
+        extract($variables);
+
         if(file_exists($templatePath)){
-            extract($variables);
-            
             ob_start();
             include $templatePath;
             $output = ob_get_clean();
-        } else {
-            ob_start();
-            include $templatePath404;
-            $output = ob_get_clean();
         }
-        echo $output;
+        ob_start();
+        include __DIR__ . '/../../public/views/main.html';
+        $finalOutput = ob_get_clean();
+
+        echo $finalOutput;
+    }
+
+    protected function renderStandalone(string $template = null, array $variables = []) {
+        $templatePath = __DIR__ . '/../../public/views/' . $template . '.html';
+        
+        $this->initSession(); 
+        if (!isset($variables['csrf']) && isset($_SESSION['csrf'])) {
+            $variables['csrf'] = $_SESSION['csrf'];
+        }
+
+
+        extract($variables);
+
+        if(file_exists($templatePath)){
+            include $templatePath;
+        } else {
+            echo "Template $template not found";
+        }
     }
 
     protected function requireLogin() 
@@ -50,7 +73,6 @@ class AppController {
             $_SESSION['csrf'] = bin2hex(random_bytes(32));
         }
     }
-
 
     protected function initSession() 
     {

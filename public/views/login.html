@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
     <title>login</title>
 </head>
-<body>
+<div class="login-container">
     <form action="login" method="POST">
         <div class="messages">
             <?php if(isset($messages)) {
-                foreach($messages as $message) { echo $message; }
+                foreach($messages as $message) { 
+                    echo '<div class="alert">'. $message .'</div>'; 
+                }
             } ?>
         </div>
+        
         <input type="hidden" name="csrf" value="<?= $_SESSION['csrf']; ?>">
+        
         <input name="email" type="text" placeholder="email@email.com">
         <input name="password" type="password" placeholder="password">
+        
         <button type="submit">Zaloguj</button>
+        <a href="/register" class="button-link">Zarejestruj się</a>
     </form>
-</body>
+</div>
 </html>
 
 

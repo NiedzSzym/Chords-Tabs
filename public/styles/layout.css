@@ -1,0 +1,22 @@
+/* Układ główny - Sidebar na stałe po lewej */
+.main-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Kontener na treść */
+.content-area {
+    flex: 1;
+    padding: 3rem;
+    overflow-y: auto; /* Przewijanie tylko treści */
+    background-color: var(--bg-color);
+}
+
+/* Szerokość sidebara (wygląd jest w sidebar.css) */
+.sidebar {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Nie zmniejszaj się */
+}

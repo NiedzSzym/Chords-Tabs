@@ -11,7 +11,10 @@ class UserRepository extends Repository {
     // Pobieranie jednego użytkownika po emailu (np. do logowania)
     public function getUserByEmail(string $email) {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM users WHERE email = :email
+            SELECT u.id, u.email, u.password, u.id_role, p.nickname 
+            FROM users u
+            LEFT JOIN user_profiles p ON u.id = p.id_user
+            WHERE u.email = :email
         ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();

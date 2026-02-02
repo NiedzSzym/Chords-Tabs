@@ -1,0 +1,10 @@
+:root {
+    --sidebar-bg: #543310;
+    --sidebar-text: #F8F4E1;
+    --accent-color: #AF8F6F;
+    --bg-color: #F8F4E1;
+    --white: #ffffff;
+    
+    --danger: #ff5e57;
+    --danger-bg: rgba(255, 94, 87, 0.1);
+}

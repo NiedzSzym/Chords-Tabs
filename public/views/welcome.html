@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/styles/welcome.css">
+
+<div class="welcome-wrapper">
+    
+    <section class="hero-section">
+        <?php if(isset($messages)): ?>
+            <div class="messages-container" style="max-width: 400px; margin: 0 auto 20px auto;">
+                <?php foreach($messages as $msg): ?>
+                    <div class="alert"><?= $msg ?></div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <h1>Twoja muzyka.<br>W jednym miejscu.</h1>
+        <p>
+            ChordManager to profesjonalne narzędzie dla muzyków. 
+            Przechowuj swoje tabulatury, twórz setlisty i miej do nich dostęp z każdego urządzenia.
+        </p>
+
+        <div class="hero-actions">
+            <a href="/register" class="btn-hero primary">Dołącz do nas</a>
+            
+            <div class="login-hint">
+                <i class="fa-solid fa-arrow-left"></i> 
+                <span>Zaloguj się w menu</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fa-solid fa-guitar"></i>
+            </div>
+            <h3>Własna biblioteka</h3>
+            <p>Zapisuj swoje ulubione akordy i teksty. Edytuj je i formatuj tak, jak lubisz.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3>Organizacja</h3>
+            <p>Porządkuj utwory w kolekcje. Nigdy więcej zgubionych kartek z tekstami.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <h3>Dostęp mobilny</h3>
+            <p>Twoje konto działa wszędzie. Przeglądaj tabulatury na telefonie, tablecie i komputerze.</p>
+        </div>
+    </section>
+
+</div>

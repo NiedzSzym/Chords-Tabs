@@ -29,56 +29,46 @@ class ChordController extends AppController {
     }
 
     #[AllowedMethods(['GET', 'POST'])]
-    public function addChord()
-    {
+    public function addChord(){
         $this->initSession();
         if (empty($_SESSION['user_id'])) {
             header("Location: /login");
             exit;
         }
 
-        // 1. GET: Wyświetlenie formularza
+        // GET: Wyświetlamy formularz i przekazujemy listę instrumentów
         if ($this->isGet()) {
-            return $this->render('add_chord');
+            $instruments = $this->chordRepository->getInstruments();
+            return $this->render('add_chord', ['instruments' => $instruments]);
         }
 
+        // POST: Zapisujemy
         if ($this->isPost()) {
-            $name = $_POST['name'] ?? '';
-            
-            // Pobieramy dane strun
-            $diagramArray = [
-                (int)($_POST['string6'] ?? 0),
-                (int)($_POST['string5'] ?? 0),
-                (int)($_POST['string4'] ?? 0),
-                (int)($_POST['string3'] ?? 0),
-                (int)($_POST['string2'] ?? 0),
-                (int)($_POST['string1'] ?? 0)
-            ];
+            $name = $_POST['name'];
+            $instrumentId = (int)$_POST['instrument_id'];
+            $tuningId = (int)$_POST['tuning_id'];
 
-            // --- WALIDACJA ---
-            $error = $this->validateChordInput($name, $diagramArray);
-            
-            if ($error) {
-                // Jeśli jest błąd, wyświetlamy formularz ponownie z komunikatem
-                return $this->render('add_chord', [
-                    'messages' => [$error],
-                    // Opcjonalnie: można przekazać wpisane dane z powrotem, żeby user nie musiał wpisywać od nowa
-                    // 'old_name' => $name 
-                ]);
+            // Pobieramy liczbę strun z ukrytego inputa (obsłużymy to w JS)
+            $stringCount = (int)$_POST['string_count']; 
+
+            // Dynamiczne zbieranie strun (np. od 1 do 4 dla Ukulele, od 1 do 6 dla Gitary)
+            $diagramArray = [];
+            // Pętla odwrócona, bo inputy idą od najgrubszej (stringX) do najcieńszej (string1)
+            // Ale w bazie chcemy: [Bass, ..., Treble]
+            for ($i = $stringCount; $i >= 1; $i--) {
+                $diagramArray[] = (int)($_POST["string$i"] ?? 0);
             }
-            // -----------------
+
+            // Walidacja (możesz tu dodać validateChordInput)
+            // ...
 
             $jsonDiagram = json_encode($diagramArray);
             $authorId = $_SESSION['user_id'];
 
-            try {
-                $this->chordRepository->addChord($name, $jsonDiagram, $authorId);
-                header("Location: /library");
-                exit;
-            } catch (Exception $e) {
-                // Łapiemy ewentualne inne błędy bazy
-                return $this->render('add_chord', ['messages' => ['Wystąpił błąd podczas zapisu.']]);
-            }
+            $this->chordRepository->addChord($name, $jsonDiagram, $authorId, $instrumentId, $tuningId);
+
+            header("Location: /library");
+            exit;
         }
     }
 
@@ -109,6 +99,24 @@ class ChordController extends AppController {
 
         header("Location: /library");
         exit;
+    }
+
+    #[AllowedMethods(['POST'])]
+    public function getTuningsApi() {
+        // Odczytujemy JSON z ciała żądania (fetch sends raw body)
+        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+
+        if ($contentType === "application/json") {
+            $content = trim(file_get_contents("php://input"));
+            $decoded = json_decode($content, true);
+            $instrumentId = $decoded['instrument_id'];
+
+            $tunings = $this->chordRepository->getTunings($instrumentId);
+
+            header('Content-Type: application/json');
+            echo json_encode($tunings);
+            exit; // Ważne, żeby nie renderować widoku
+        }
     }
 
     private function validateChordInput(string $name, array $strings): ?string 

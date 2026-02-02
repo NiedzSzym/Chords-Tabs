@@ -3,12 +3,13 @@ class ChordDrawer {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.chord = chordData;
+        const detectedStrings = this.chord.length;
 
         this.config = {
             padding: 40,
             width: 130, 
             height: 180, 
-            numStrings: 6,
+            numStrings: detectedStrings,
             numFrets: 5,
             lineColor: '#2d3436',
             dotColor: '#2d3436',

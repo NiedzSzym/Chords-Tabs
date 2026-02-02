@@ -20,15 +20,16 @@ class ChordRepository extends Repository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addChord(string $name, string $diagramData, int $authorId): void {
-        // author_id nie jest NULL, więc to będzie akord prywatny
+    public function addChord(string $name, string $diagramData, int $authorId, int $instrumentId, int $tuningId): void {
         $stmt = $this->database->connect()->prepare('
             INSERT INTO chords (name, chord_diagram, instrument_type_id, tuning_id, author_id)
-            VALUES (:name, :diagram, 1, 1, :author)
+            VALUES (:name, :diagram, :instrument, :tuning, :author)
         ');
 
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':diagram', $diagramData, PDO::PARAM_STR);
+        $stmt->bindParam(':instrument', $instrumentId, PDO::PARAM_INT);
+        $stmt->bindParam(':tuning', $tuningId, PDO::PARAM_INT);
         $stmt->bindParam(':author', $authorId, PDO::PARAM_INT);
 
         $stmt->execute();
@@ -60,5 +61,26 @@ class ChordRepository extends Repository
 
         return $chord;
     }
+
+    public function getInstruments(): array
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM instrument_types ORDER BY id
+        ');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTunings(int $instrumentId): array
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM tunings WHERE instrument_type_id = :id
+        ');
+        $stmt->bindParam(':id', $instrumentId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
 
 }

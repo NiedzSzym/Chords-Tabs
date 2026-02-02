@@ -39,6 +39,10 @@ class Routing {
         'delete-chord' => [
             'controller' => 'ChordController',
             'action' => 'deleteChord'
+        ],
+        'api-get-tunings' => [
+            'controller' => 'ChordController',
+            'action' => 'getTuningsApi'
         ]
 
     ];

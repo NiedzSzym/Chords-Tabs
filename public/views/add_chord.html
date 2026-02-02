@@ -6,77 +6,47 @@
         <a href="/library" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Wróć</a>
     </div>
 
-    <form action="/add-chord" method="POST" class="chord-form">
-        <input type="hidden" name="csrf" value="<?= $csrf ?>">
+    <?php if(isset($messages)): ?>
+        <?php endif; ?>
 
+    <form action="/add-chord" method="POST" class="chord-form">
+        
         <div class="input-group">
             <label>Nazwa akordu</label>
-            <input type="text" name="name" placeholder="np. C Major 7" required>
+            <input type="text" name="name" placeholder="np. C Major" required>
         </div>
+
+        <div class="row" style="display: flex; gap: 20px; margin-bottom: 20px;">
+            <div class="input-group" style="flex: 1;">
+                <label>Instrument</label>
+                <select name="instrument_id" id="instrumentSelect" required>
+                    <?php foreach($instruments as $instr): ?>
+                        <option value="<?= $instr['id'] ?>" data-strings="<?= $instr['string_count'] ?>">
+                            <?= $instr['name'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="input-group" style="flex: 1;">
+                <label>Strojenie</label>
+                <select name="tuning_id" id="tuningSelect" required>
+                    <option value="" disabled selected>Wybierz instrument...</option>
+                    </select>
+            </div>
+        </div>
+
+        <input type="hidden" name="string_count" id="stringCountInput" value="6">
 
         <div class="fretboard-inputs">
             <h3>Ustawienie palców</h3>
-            <p class="hint">Wybierz próg dla każdej struny (X = nie graj, 0 = pusta)</p>
-
-            <div class="strings-row">
-                <div class="string-input">
-                    <label>E (6)</label>
-                    <select name="string6">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): ?>
-                            <option value="<?= $i ?>"><?= $i ?></option>
-                        <?php endfor; ?>
-                    </select>
-                </div>
-
-                <div class="string-input">
-                    <label>A (5)</label>
-                    <select name="string5">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): echo "<option value='$i'>$i</option>"; endfor; ?>
-                    </select>
-                </div>
-
-                <div class="string-input">
-                    <label>D (4)</label>
-                    <select name="string4">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): echo "<option value='$i'>$i</option>"; endfor; ?>
-                    </select>
-                </div>
-
-                <div class="string-input">
-                    <label>G (3)</label>
-                    <select name="string3">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): echo "<option value='$i'>$i</option>"; endfor; ?>
-                    </select>
-                </div>
-
-                <div class="string-input">
-                    <label>B (2)</label>
-                    <select name="string2">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): echo "<option value='$i'>$i</option>"; endfor; ?>
-                    </select>
-                </div>
-
-                <div class="string-input">
-                    <label>E (1)</label>
-                    <select name="string1">
-                        <option value="-1">X</option>
-                        <option value="0" selected>0</option>
-                        <?php for($i=1; $i<=24; $i++): echo "<option value='$i'>$i</option>"; endfor; ?>
-                    </select>
-                </div>
-            </div>
+            <p class="hint">Wybierz próg (X = tłumiona, 0 = pusta)</p>
+            
+            <div class="strings-row" id="stringsContainer"></div>
         </div>
 
         <button type="submit" class="btn-save">Zapisz akord</button>
     </form>
 </div>
+
+<script src="/scripts/add_chord_logic.js"></script>

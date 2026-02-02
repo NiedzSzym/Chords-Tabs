@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Repository.php'; // Stwórz pustą klasę Repository rozszerzającą Database
+require_once 'Repository.php';
 require_once __DIR__.'/../model/User.php';
 
 class UserRepository extends Repository {
@@ -8,7 +8,7 @@ class UserRepository extends Repository {
     public static function getInstance() {
         return self::$instance ??= new UserRepository();
     }
-    // Pobieranie jednego użytkownika po emailu (np. do logowania)
+
     public function getUserByEmail(string $email) {
         $stmt = $this->database->connect()->prepare('
             SELECT u.id, u.email, u.password, u.id_role, p.nickname 

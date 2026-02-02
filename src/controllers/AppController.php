@@ -2,13 +2,11 @@
 
 class AppController {
 
-    protected function isGet(): bool
-    {
+    protected function isGet(): bool {
         return $_SERVER['REQUEST_METHOD'] === 'GET';
     }
 
-    protected function isPOST(): bool
-    {
+    protected function isPOST(): bool {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
@@ -54,8 +52,7 @@ class AppController {
         }
     }
 
-    protected function requireLogin() 
-    { 
+    protected function requireLogin() { 
         $this->initSession();
     
         if (empty($_SESSION['user_id'])) { 
@@ -65,8 +62,7 @@ class AppController {
         } 
     } 
 
-    protected function generateCsrf(): void
-    {
+    protected function generateCsrf(): void {
         $this->initSession();
 
         if (empty($_SESSION['csrf'])) {
@@ -74,8 +70,7 @@ class AppController {
         }
     }
 
-    protected function initSession() 
-    {
+    protected function initSession() {
         if (session_status() === PHP_SESSION_NONE) {
             session_set_cookie_params(['httponly' => true]);
             session_set_cookie_params(['secure' => true]);

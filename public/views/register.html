@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejestracja - ChordManager</title>
+    <title>Sign Up - ChordManager</title>
     <link rel="stylesheet" href="/styles/variables.css">
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/layout.css">
@@ -13,7 +13,7 @@
 <body>
 
     <div class="form-card">
-        <h1>Dołącz do nas</h1>
+        <h1>Join Us</h1>
         
         <div class="messages">
             <?php if(isset($messages)) {
@@ -27,15 +27,15 @@
             <input type="hidden" name="csrf" value="<?= $csrf ?? '' ?>">
 
             <input class="form-input" name="email" type="email" placeholder="Email" required>
-            <input class="form-input" name="nickname" type="text" placeholder="Nazwa użytkownika" required>
-            <input class="form-input" name="password1" type="password" placeholder="Hasło" required>
-            <input class="form-input" name="password2" type="password" placeholder="Powtórz hasło" required>
+            <input class="form-input" name="nickname" type="text" placeholder="Username" required>
+            <input class="form-input" name="password1" type="password" placeholder="Password" required>
+            <input class="form-input" name="password2" type="password" placeholder="Confirm Password" required>
             
-            <button type="submit" class="btn-submit">Utwórz konto</button>
+            <button type="submit" class="btn-submit">Create Account</button>
         </form>
 
         <div class="link-text">
-            <a href="/">Wróć do strony głównej</a>
+            <a href="/">Back to Home</a>
         </div>
     </div>
 

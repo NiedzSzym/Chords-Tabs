@@ -3,10 +3,8 @@
 require_once 'Repository.php';
 require_once __DIR__.'/../model/Chord.php';
 
-class ChordRepository extends Repository
-{
-    public function getChords(int $userId): array
-    {
+class ChordRepository extends Repository {
+    public function getChords(int $userId): array {
 
         $stmt = $this->database->connect()->prepare('
             SELECT * FROM chords 
@@ -35,8 +33,7 @@ class ChordRepository extends Repository
         $stmt->execute();
     }
 
-    public function deleteChord(int $id): void
-    {
+    public function deleteChord(int $id): void {
         $stmt = $this->database->connect()->prepare('
             DELETE FROM chords WHERE id = :id
         ');
@@ -45,8 +42,7 @@ class ChordRepository extends Repository
         $stmt->execute();
     }
 
-    public function getChordById(int $id): ?array
-    {
+    public function getChordById(int $id): ?array {
         $stmt = $this->database->connect()->prepare('
             SELECT * FROM chords WHERE id = :id
         ');
@@ -62,8 +58,7 @@ class ChordRepository extends Repository
         return $chord;
     }
 
-    public function getInstruments(): array
-    {
+    public function getInstruments(): array {
         $stmt = $this->database->connect()->prepare('
             SELECT * FROM instrument_types ORDER BY id
         ');
@@ -71,8 +66,7 @@ class ChordRepository extends Repository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getTunings(int $instrumentId): array
-    {
+    public function getTunings(int $instrumentId): array {
         $stmt = $this->database->connect()->prepare('
             SELECT * FROM tunings WHERE instrument_type_id = :id
         ');

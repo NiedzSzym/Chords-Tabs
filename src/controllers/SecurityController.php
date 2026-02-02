@@ -94,7 +94,6 @@ class SecurityController extends AppController {
         exit;
     }
 
-    // --- Metody pomocnicze ---
 
     private function verifyCsrfToken(): bool { 
         return isset($_POST['csrf']) && isset($_SESSION['csrf']) && $_POST['csrf'] === $_SESSION['csrf']; 

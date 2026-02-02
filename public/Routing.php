@@ -48,7 +48,6 @@ class Routing {
     ];
 
     public static function run(string $path) {
-        // Sprawdzamy czy ścieżka istnieje
         if (!array_key_exists($path, self::$routes)) {
              include __DIR__ . '/../public/views/404.html';
              return;

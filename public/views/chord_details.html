@@ -1,45 +1,31 @@
-
 <h1><?= $chord['name'] ?></h1>
 
 <div class="badges-container">
     <?php if (empty($chord['author_id'])): ?>
         <span class="badge system">
-            <i class="fa-solid fa-globe"></i> Ogólnodostępny
+            <i class="fa-solid fa-globe"></i> Public
         </span>
     <?php elseif ($chord['author_id'] == $_SESSION['user_id']): ?>
         <span class="badge private">
-            <i class="fa-solid fa-user-lock"></i> Twój prywatny
+            <i class="fa-solid fa-user-lock"></i> Private
         </span>
     <?php else: ?>
-        <span class="badge other">Użytkownika</span>
+        <span class="badge other">User Created</span>
     <?php endif; ?>
-</div>
-<div class="audio-player-box">
-    <p>Posłuchaj jak brzmi:</p>
-    <button id="playChordBtn" class="btn-play-big">
-        <i class="fa-solid fa-play"></i> Odtwórz
-    </button>
-</div>
-
-<div class="theory-box">
-    <h3>Struktura:</h3>
-    <p>Pozycje palców (struny E-e): <br> 
-        <code style="font-size: 1.2rem;"><?= $chord['chord_diagram'] ?></code>
-    </p>
 </div>
 
 <?php if ($chord['author_id'] == $_SESSION['user_id']): ?>
     <div class="actions-footer" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
-        <form action="/deleteChord" method="POST" onsubmit="return confirm('Czy na pewno chcesz usunąć ten akord? Tej operacji nie można cofnąć.');">
+        <form action="/delete-chord" method="POST" onsubmit="return confirm('Are you sure you want to delete this chord? This action cannot be undone.');">
             <input type="hidden" name="id" value="<?= $chord['id'] ?>">
             <button type="submit" class="btn-delete">
-                <i class="fa-solid fa-trash"></i> Usuń ten akord
+                <i class="fa-solid fa-trash"></i> Delete Chord
             </button>
         </form>
     </div>
 <?php else: ?>
     <div class="actions-footer" style="margin-top: 40px; opacity: 0.6; font-size: 0.9rem;">
-        <p><i class="fa-solid fa-lock"></i> Tego akordu nie można usunąć (Baza Systemowa).</p>
+        <p><i class="fa-solid fa-lock"></i> This chord cannot be deleted (System Database).</p>
     </div>
 <?php endif; ?>
 </div>

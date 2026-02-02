@@ -3,14 +3,14 @@
 <div class="library-container">
     
     <div class="library-header">
-        <h1>Biblioteka Akordów</h1>
+        <h1>Chord Library</h1>
         <a href="/add-chord" class="btn-add">
-            <i class="fa-solid fa-plus"></i> Dodaj własny
+            <i class="fa-solid fa-plus"></i> Add New
         </a>
     </div>
 
     <div class="search-bar">
-        <input type="text" placeholder="Szukaj akordu (np. C major)...">
+        <input type="text" placeholder="Search chord (e.g. C Major)...">
         <button><i class="fa-solid fa-search"></i></button>
     </div>
 
@@ -24,11 +24,11 @@
                 <div class="card-badges">
                     <?php if($isSystem): ?>
                         <span class="badge system">
-                            <i class="fa-solid fa-globe"></i> Publiczny
+                            <i class="fa-solid fa-globe"></i> Public
                         </span>
                     <?php else: ?>
                         <span class="badge private">
-                            <i class="fa-solid fa-user-lock"></i> Twój
+                            <i class="fa-solid fa-user-lock"></i> Private
                         </span>
                     <?php endif; ?>
                 </div>
@@ -45,14 +45,14 @@
 
                 <div class="card-actions">
                     <?php if(!$isSystem): ?>
-                        <form action="/delete-chord" method="POST" onsubmit="return confirm('Czy na pewno usunąć ten akord?');">
+                        <form action="/delete-chord" method="POST" onsubmit="return confirm('Are you sure you want to delete this chord?');">
                             <input type="hidden" name="id" value="<?= $chord['id'] ?>">
                             <button type="submit" class="btn-delete">
-                                <i class="fa-solid fa-trash"></i> Usuń
+                                <i class="fa-solid fa-trash"></i> Delete
                             </button>
                         </form>
                     <?php else: ?>
-                        <span class="info-text">Nieedytowalny</span>
+                        <span class="info-text">System Chord</span>
                     <?php endif; ?>
                 </div>
 
@@ -71,7 +71,7 @@
                 const data = JSON.parse(canvas.dataset.chord);
                 new ChordDrawer(canvas, data);
             } catch (e) {
-                console.error("Błąd rysowania:", e);
+                console.error("Drawing error:", e);
             }
         });
     });

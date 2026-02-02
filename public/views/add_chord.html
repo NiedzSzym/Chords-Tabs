@@ -2,8 +2,8 @@
 
 <div class="add-chord-container">
     <div class="form-header">
-        <h1>Dodaj nowy akord</h1>
-        <a href="/library" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Wróć</a>
+        <h1>Add New Chord</h1>
+        <a href="/library" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
     </div>
 
     <?php if(isset($messages)): ?>
@@ -12,8 +12,8 @@
     <form action="/add-chord" method="POST" class="chord-form">
         
         <div class="input-group">
-            <label>Nazwa akordu</label>
-            <input type="text" name="name" placeholder="np. C Major" required>
+            <label>Chord Name</label>
+            <input type="text" name="name" placeholder="e.g. C Major" required>
         </div>
 
         <div class="row" style="display: flex; gap: 20px; margin-bottom: 20px;">
@@ -29,23 +29,23 @@
             </div>
 
             <div class="input-group" style="flex: 1;">
-                <label>Strojenie</label>
+                <label>Tuning</label>
                 <select name="tuning_id" id="tuningSelect" required>
-                    <option value="" disabled selected>Wybierz instrument...</option>
-                    </select>
+                    <option value="" disabled selected>Select instrument...</option>
+                </select>
             </div>
         </div>
 
         <input type="hidden" name="string_count" id="stringCountInput" value="6">
 
         <div class="fretboard-inputs">
-            <h3>Ustawienie palców</h3>
-            <p class="hint">Wybierz próg (X = tłumiona, 0 = pusta)</p>
+            <h3>Finger Placement</h3>
+            <p class="hint">Select fret (X = muted, 0 = open)</p>
             
             <div class="strings-row" id="stringsContainer"></div>
         </div>
 
-        <button type="submit" class="btn-save">Zapisz akord</button>
+        <button type="submit" class="btn-save">Save Chord</button>
     </form>
 </div>
 

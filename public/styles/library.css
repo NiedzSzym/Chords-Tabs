@@ -1,0 +1,20 @@
+.system-card {
+    border-top: 4px solid #b2bec3; /* Szary pasek na górze */
+}
+
+/* Karta użytkownika (np. akcentowa) */
+.user-card {
+    border-top: 4px solid var(--accent-color); /* Twój brązowy kolor */
+}
+
+.card-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #dfe6e9;
+    font-size: 1.2rem;
+}
+
+.user-card .card-icon {
+    color: var(--accent-color); /* Ikonka kłódki w kolorze motywu */
+}

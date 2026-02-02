@@ -4,6 +4,7 @@ require_once __DIR__ . '/../src/controllers/SecurityController.php';
 require_once __DIR__ . '/../src/attributes/Options.php';
 require_once __DIR__ . '/../src/middleware/CheckRequestAllowed.php';
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
+require_once __DIR__ . '/../src/controllers/ChordController.php';
 
 class Routing {
     public static $routes = [
@@ -26,6 +27,10 @@ class Routing {
         'dashboard' => [
             'controller' => 'DashboardController',
             'action' => 'index'
+        ],
+        'library' => [
+            'controller' => 'ChordController',
+            'action' => 'library'
         ]
 
     ];

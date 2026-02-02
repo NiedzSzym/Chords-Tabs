@@ -57,7 +57,8 @@ CREATE TABLE chords (
     name VARCHAR(10) NOT NULL,
     chord_diagram TEXT,
     instrument_type_id INTEGER NOT NULL REFERENCES instrument_types(id),
-    tuning_id INTEGER NOT NULL REFERENCES tunings(id)
+    tuning_id INTEGER NOT NULL REFERENCES tunings(id),
+    author_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
  
@@ -69,3 +70,6 @@ CREATE TABLE chords_for_songs (
 
 INSERT INTO roles (name) VALUES ('admin');
 INSERT INTO roles (name) VALUES ('user');
+INSERT INTO instrument_types (name, string_count) VALUES ('Guitar', 6);
+INSERT INTO instrument_types (name, string_count) VALUES ('Ukulele', 4);
+INSERT INTO tunings (tuning, instrument_type_id) VALUES ('E Standard', 1);

@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/styles/library.css"> 
+<div class="library-container">
+    
+    <div class="library-header">
+        <h1>Biblioteka Akordów</h1>
+        <a href="/add-chord" class="btn-add">
+            <i class="fa-solid fa-plus"></i> Dodaj własny
+        </a>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Szukaj akordu (np. C major)...">
+        <button><i class="fa-solid fa-search"></i></button>
+    </div>
+
+    <div class="chords-grid">
+        <?php foreach ($chords as $chord): ?>
+            
+            <?php $isSystem = empty($chord['id_user']); ?>
+
+            <div class="chord-card <?= $isSystem ? 'system-card' : 'user-card' ?>">
+                
+                <div class="card-icon">
+                    <?php if($isSystem): ?>
+                        <i class="fa-solid fa-globe" title="Akord publiczny"></i>
+                    <?php else: ?>
+                        <i class="fa-solid fa-user-lock" title="Twój prywatny akord"></i>
+                    <?php endif; ?>
+                </div>
+
+                <h3><?= $chord['name'] ?></h3>
+                
+                <div class="chord-diagram-placeholder">
+                    <img src="/public/uploads/<?= $chord['image'] ?? 'default_chord.png' ?>" alt="Diagram">
+                </div>
+
+                <div class="card-actions">
+                    <a href="/chord?id=<?= $chord['id'] ?>" class="btn-view">Zobacz</a>
+                    
+                    <?php if(!$isSystem): ?>
+                        <a href="/edit-chord?id=<?= $chord['id'] ?>" class="btn-edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+
+        <?php endforeach; ?>
+    </div>
+</div>

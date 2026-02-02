@@ -31,6 +31,14 @@ class Routing {
         'library' => [
             'controller' => 'ChordController',
             'action' => 'library'
+        ],
+        'add-chord' => [
+            'controller' => 'ChordController',
+            'action' => 'addChord'
+        ],
+        'delete-chord' => [
+            'controller' => 'ChordController',
+            'action' => 'deleteChord'
         ]
 
     ];

@@ -1,0 +1,111 @@
+.add-chord-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.form-header h1 {
+    color: var(--sidebar-bg);
+}
+
+.btn-back {
+    color: #636e72;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.input-group {
+    margin-bottom: 30px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #2d3436;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+}
+
+/* --- Sekcja Strun --- */
+.fretboard-inputs {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.hint {
+    font-size: 0.9rem;
+    color: #636e72;
+    margin-bottom: 20px;
+}
+
+.strings-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.string-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.string-input label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--sidebar-bg);
+}
+
+.string-input select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.string-input select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.btn-save {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--sidebar-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-save:hover {
+    background-color: var(--accent-color);
+}

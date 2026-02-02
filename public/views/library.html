@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="/styles/library.css"> 
+<link rel="stylesheet" href="/styles/library.css">
+
 <div class="library-container">
     
     <div class="library-header">
@@ -16,31 +17,42 @@
     <div class="chords-grid">
         <?php foreach ($chords as $chord): ?>
             
-            <?php $isSystem = empty($chord['id_user']); ?>
+            <?php $isSystem = empty($chord['author_id']); ?>
 
             <div class="chord-card <?= $isSystem ? 'system-card' : 'user-card' ?>">
                 
-                <div class="card-icon">
+                <div class="card-badges">
                     <?php if($isSystem): ?>
-                        <i class="fa-solid fa-globe" title="Akord publiczny"></i>
+                        <span class="badge system">
+                            <i class="fa-solid fa-globe"></i> Publiczny
+                        </span>
                     <?php else: ?>
-                        <i class="fa-solid fa-user-lock" title="Twój prywatny akord"></i>
+                        <span class="badge private">
+                            <i class="fa-solid fa-user-lock"></i> Twój
+                        </span>
                     <?php endif; ?>
                 </div>
 
                 <h3><?= $chord['name'] ?></h3>
                 
-                <div class="chord-diagram-placeholder">
-                    <img src="/public/uploads/<?= $chord['image'] ?? 'default_chord.png' ?>" alt="Diagram">
+                <div class="canvas-wrapper">
+                    <canvas class="chord-canvas" 
+                            width="200" 
+                            height="240"
+                            data-chord='<?= $chord['chord_diagram'] ?>'>
+                    </canvas>
                 </div>
 
                 <div class="card-actions">
-                    <a href="/chord?id=<?= $chord['id'] ?>" class="btn-view">Zobacz</a>
-                    
                     <?php if(!$isSystem): ?>
-                        <a href="/edit-chord?id=<?= $chord['id'] ?>" class="btn-edit">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
+                        <form action="/delete-chord" method="POST" onsubmit="return confirm('Czy na pewno usunąć ten akord?');">
+                            <input type="hidden" name="id" value="<?= $chord['id'] ?>">
+                            <button type="submit" class="btn-delete">
+                                <i class="fa-solid fa-trash"></i> Usuń
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <span class="info-text">Nieedytowalny</span>
                     <?php endif; ?>
                 </div>
 
@@ -49,3 +61,30 @@
         <?php endforeach; ?>
     </div>
 </div>
+
+<script src="/scripts/chordDrawer.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const canvases = document.querySelectorAll('.chord-canvas');
+        canvases.forEach(canvas => {
+            try {
+                const data = JSON.parse(canvas.dataset.chord);
+                new ChordDrawer(canvas, data);
+            } catch (e) {
+                console.error("Błąd rysowania:", e);
+            }
+        });
+    });
+
+    // Live Search
+    const searchInput = document.querySelector('.search-bar input');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.chord-card').forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = title.includes(term) ? "flex" : "none";
+            });
+        });
+    }
+</script>

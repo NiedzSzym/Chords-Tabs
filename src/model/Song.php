@@ -14,7 +14,7 @@ class Song
     private $keyId;
     private $authorId;
 
-    // Konstruktor
+
     public function __construct(
         string $name,
         string $artistName,
@@ -41,7 +41,7 @@ class Song
         $this->id = $id;
     }
 
-    // Gettery (żeby pobierać dane)
+
     public function getId(): ?int { return $this->id; }
     public function getName(): string { return $this->name; }
     public function getArtistName(): string { return $this->artistName; }
@@ -54,7 +54,7 @@ class Song
     public function getKeyId(): ?int { return $this->keyId; }
     public function getAuthorId(): int { return $this->authorId; }
 
-    // Settery (opcjonalnie, jeśli będziesz edytować obiekt)
+
     public function setName(string $name): void { $this->name = $name; }
-    // ... reszta setterów ...
+
 }

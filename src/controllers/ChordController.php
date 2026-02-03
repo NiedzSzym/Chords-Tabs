@@ -66,11 +66,12 @@ class ChordController extends AppController {
 
             $jsonDiagram = json_encode($diagramArray);
             $authorId = $_SESSION['user_id'];
-
-            $this->chordRepository->addChord($name, $jsonDiagram, $authorId, $instrumentId, $tuningId);
-
-            header("Location: /library");
-            exit;
+            if (isset($_SESSION['role_id']) && $_SESSION['role_id'] === 1 && !empty($_POST['is_global'])) {
+                    $authorId = null;
+                $this->chordRepository->addChord($name, $jsonDiagram, $authorId, $instrumentId, $tuningId);
+                header("Location: /library");
+                exit;
+            }
         }
     }
 

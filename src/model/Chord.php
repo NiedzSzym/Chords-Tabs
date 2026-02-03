@@ -4,10 +4,10 @@ class Chord {
     private $id;
     private $name;
     private $chordDiagram;
-    private $authorId;
+    private ?int $authorId;
 
 
-    public function __construct(string $name, string $chordDiagram, ?int $authorId = null) {
+    public function __construct(string $name, string $chordDiagram, ?int $authorId) {
         $this->name = $name;
         $this->chordDiagram = $chordDiagram;
         $this->authorId = $authorId;

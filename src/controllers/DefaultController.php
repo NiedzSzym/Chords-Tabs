@@ -6,7 +6,7 @@ class DefaultController extends AppController {
 
     public function index() {
         $this->initSession();
-
+        $this->generateCsrf();
         if (!empty($_SESSION['user_id'])) {
             header("Location: /songs");
             exit;

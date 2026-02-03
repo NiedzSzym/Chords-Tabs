@@ -4,33 +4,41 @@ require_once 'Repository.php';
 require_once __DIR__.'/../model/Chord.php';
 
 class ChordRepository extends Repository {
-    public function getChords(int $userId): array {
-
+    public function getChords(int $userId): array
+    {
+        // Pobieramy akordy, które są MOJE (author_id = :id)
+        // LUB są GLOBALNE (author_id IS NULL)
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM chords 
-            WHERE author_id = :id OR author_id IS NULL
-            ORDER BY name ASC
+            SELECT c.*, 
+                   it.name as instrument_name, 
+                   t.tuning 
+            FROM chords c
+            JOIN instrument_types it ON c.instrument_type_id = it.id
+            JOIN tunings t ON c.tuning_id = t.id
+            WHERE c.author_id = :id OR c.author_id IS NULL
+            ORDER BY c.name ASC
         ');
-
+        
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addChord(string $name, string $diagramData, int $authorId, int $instrumentId, int $tuningId): void {
+    public function addChord(Chord $chord): void
+    {
         $stmt = $this->database->connect()->prepare('
             INSERT INTO chords (name, chord_diagram, instrument_type_id, tuning_id, author_id)
-            VALUES (:name, :diagram, :instrument, :tuning, :author)
+            VALUES (?, ?, ?, ?, ?)
         ');
 
-        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt->bindParam(':diagram', $diagramData, PDO::PARAM_STR);
-        $stmt->bindParam(':instrument', $instrumentId, PDO::PARAM_INT);
-        $stmt->bindParam(':tuning', $tuningId, PDO::PARAM_INT);
-        $stmt->bindParam(':author', $authorId, PDO::PARAM_INT);
-
-        $stmt->execute();
+        $stmt->execute([
+            $chord->getName(),
+            $chord->getDiagram(),      
+            $chord->getInstrumentTypeId(),
+            $chord->getTuningId(),
+            $chord->getAuthorId() 
+        ]);
     }
 
     public function deleteChord(int $id): void {

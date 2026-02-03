@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/styles/profile.css">
+
+<header class="top-bar">
+    <h1>User Profile</h1>
+</header>
+
+<section class="profile-card">
+    <div class="profile-header">
+        <div class="avatar-placeholder">
+            <?= strtoupper(substr($user['nickname'] ?? 'U', 0, 1)) ?>
+        </div>
+        <div class="user-info">
+            <h2><?= $user['nickname'] ?? 'Unknown User' ?></h2>
+            <span class="email"><?= $user['email'] ?></span>
+            <span class="role-badge">
+                <?= isset($user['id_role']) && $user['id_role'] === 1 ? 'Admin' : 'Musician' ?>
+            </span>
+        </div>
+    </div>
+
+    <div class="profile-bio-section">
+        <h3><i class="fa-solid fa-quote-left"></i> About Me</h3>
+        <div class="bio-content">
+            <?php if(!empty($user['bio'])): ?>
+                <p><?= nl2br(htmlspecialchars($user['bio'])) ?></p>
+            <?php else: ?>
+                <p class="empty-bio">This user hasn't written a bio yet.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <div class="profile-actions">
+        <button class="btn-edit" onclick="alert('Edit feature coming soon!')">Edit Profile</button>
+    </div>
+</section>

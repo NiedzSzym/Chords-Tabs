@@ -1,4 +1,3 @@
-
 CREATE TYPE key_mode_enum AS ENUM ('major', 'minor');
 
 CREATE TABLE roles (
@@ -12,6 +11,17 @@ CREATE TABLE instrument_types (
     string_count INTEGER NOT NULL
 );
 
+CREATE TABLE keys (
+    id SERIAL PRIMARY KEY,
+    key_name VARCHAR(10) NOT NULL,
+    key_mode key_mode_enum
+);
+
+CREATE TABLE tunings (
+    id SERIAL PRIMARY KEY,
+    tuning VARCHAR(10) NOT NULL,
+    instrument_type_id INTEGER NOT NULL REFERENCES instrument_types(id)
+);
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -27,19 +37,6 @@ CREATE TABLE user_profiles (
     bio TEXT
 );
 
-
-CREATE TABLE keys (
-    id SERIAL PRIMARY KEY,
-    key_name VARCHAR(10) NOT NULL,
-    key_mode key_mode_enum
-);
-
-CREATE TABLE tunings (
-    id SERIAL PRIMARY KEY,
-    tuning VARCHAR(10) NOT NULL,
-    instrument_type_id INTEGER NOT NULL REFERENCES instrument_types(id)
-);
-
 CREATE TABLE songs (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -52,8 +49,9 @@ CREATE TABLE songs (
     time_signature VARCHAR(10) DEFAULT '4/4',
     tempo INTEGER DEFAULT 120,
     song_text TEXT NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE chords (
     id SERIAL PRIMARY KEY,
@@ -64,25 +62,51 @@ CREATE TABLE chords (
     author_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
- 
 CREATE TABLE chords_for_songs (
     song_id INTEGER REFERENCES songs(id) ON DELETE CASCADE,
     chord_id INTEGER REFERENCES chords(id) ON DELETE CASCADE,
     PRIMARY KEY (song_id, chord_id)
 );
 
-CREATE OR REPLACE FUNCTION update_modified_column()
+CREATE OR REPLACE FUNCTION format_song_data()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at = NOW();
+    NEW.name = TRIM(NEW.name);
+    NEW.artist_name = INITCAP(TRIM(NEW.artist_name));
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_update_song_timestamp
-BEFORE UPDATE ON songs
+CREATE TRIGGER trigger_format_song_data
+BEFORE INSERT ON songs
 FOR EACH ROW
-EXECUTE FUNCTION update_modified_column();
+EXECUTE FUNCTION format_song_data();
+
+CREATE OR REPLACE VIEW song_details_view AS
+SELECT s.id, 
+       s.name, 
+       s.artist_name, 
+       s.song_text, 
+       s.capo_fret, 
+       s.tempo, 
+       s.time_signature, 
+       s.created_at, 
+       s.author_id,
+       k.key_name, 
+       k.key_mode,
+       i.name as instrument_name,
+       t.tuning, 
+       t.id as tuning_id
+FROM songs s
+LEFT JOIN keys k ON s.key_id = k.id
+LEFT JOIN instrument_types i ON s.instrument_type_id = i.id
+LEFT JOIN tunings t ON s.tuning_id = t.id;
+
+
+CREATE OR REPLACE VIEW auth_users_view AS
+SELECT u.id, u.email, u.password, u.id_role, p.nickname, p.bio
+FROM users u
+LEFT JOIN user_profiles p ON u.id = p.id_user;
 
 INSERT INTO roles (name) VALUES ('admin');
 INSERT INTO roles (name) VALUES ('user');

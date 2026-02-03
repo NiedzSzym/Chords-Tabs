@@ -65,15 +65,7 @@ class SongRepository extends Repository
     public function getSongById(int $id): ?array
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT s.*, 
-                   k.key_name, k.key_mode,
-                   i.name as instrument_name,
-                   t.tuning
-            FROM songs s
-            LEFT JOIN keys k ON s.key_id = k.id
-            LEFT JOIN instrument_types i ON s.instrument_type_id = i.id
-            LEFT JOIN tunings t ON s.tuning_id = t.id
-            WHERE s.id = :id
+            SELECT * FROM song_details_view WHERE id = :id
         ');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

@@ -114,7 +114,7 @@ class SecurityController extends AppController {
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['nickname'] = $user['nickname'];
         $_SESSION['is_logged_in'] = true;
-        header("Location: /dashboard");
+        header("Location: /songs");
         exit;
     }
     

@@ -3,14 +3,15 @@
 require_once __DIR__ . '/../src/controllers/SecurityController.php';
 require_once __DIR__ . '/../src/attributes/Options.php';
 require_once __DIR__ . '/../src/middleware/CheckRequestAllowed.php';
-require_once __DIR__ . '/../src/controllers/DashboardController.php';
+require_once __DIR__ . '/../src/controllers/DefaultController.php';
 require_once __DIR__ . '/../src/controllers/ChordController.php';
 require_once __DIR__ . '/../src/controllers/SongController.php';
+require_once __DIR__ . '/../src/controllers/ProfileController.php';
 
 class Routing {
     public static $routes = [
         '' => [
-            'controller' => 'DashboardController',
+            'controller' => 'DefaultController',
             'action' => 'index'
         ],
         'login' => [
@@ -24,10 +25,6 @@ class Routing {
         'register' => [
             'controller' => "SecurityController",
             'action' => 'register'
-        ],
-        'dashboard' => [
-            'controller' => 'DashboardController',
-            'action' => 'index'
         ],
         'library' => [
             'controller' => 'ChordController',
@@ -56,6 +53,10 @@ class Routing {
         'song' => [
             'controller' => 'SongController',
             'action' => 'viewSong'
+        ],
+        'profile' => [
+            'controller' => 'ProfileController',
+            'action' => 'show'
         ]
 
 

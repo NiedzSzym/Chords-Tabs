@@ -12,7 +12,6 @@
 }
 .logo span { color: var(--accent-color); }
 
-/* Sekcja użytkownika */
 .user-profile {
     text-align: center;
     margin-bottom: 2rem;
@@ -34,7 +33,6 @@
     margin: 0 auto 10px auto;
 }
 
-/* Nawigacja */
 .main-nav ul { list-style: none; }
 .main-nav li { margin-bottom: 10px; }
 
@@ -59,11 +57,9 @@
 .btn-logout { color: var(--danger); }
 .btn-logout:hover { background: var(--danger-bg); }
 
-/* --- MINI FORMULARZ (specyficzny dla sidebara) --- */
 .login-mini-form h3 { color: var(--white); margin-bottom: 5px; }
 .login-mini-form p { font-size: 0.85rem; margin-bottom: 15px; opacity: 0.7; }
 
-/* Nadpisujemy inputy dla ciemnego tła sidebara */
 .login-mini-form input {
     width: 100%;
     background: rgba(255,255,255,0.05);
@@ -91,3 +87,168 @@
     text-align: center;
 }
 .register-link a { color: var(--accent-color); text-decoration: none; }
+.mobile-guest-nav {
+    display: none;
+}
+
+
+
+@media (max-width: 768px) {
+    
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        width: 100%;
+        height: 60px;
+        
+        background-color: white !important;
+        background: white !important;
+        
+        border-top: 1px solid #ddd;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 9999;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar .logo,
+    .sidebar .user-profile,
+    .desktop-only {
+        display: none !important;
+    }
+
+
+    .sidebar .auth-section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .mobile-guest-nav {
+        display: block !important; 
+        
+        width: 100%;      
+        height: 100%;
+    }
+
+    .mobile-guest-nav ul {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        justify-content: space-evenly;
+    }
+
+    .mobile-guest-nav li {
+        flex: 1; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .mobile-guest-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #636e72;
+        font-size: 0.75rem;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mobile-guest-nav a i {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+        color: var(--accent-color, #6c5ce7);
+    }
+
+    .sidebar .main-nav {
+        flex: 2; 
+        width: auto;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar .main-nav ul {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        justify-content: space-evenly; 
+    }
+
+    .sidebar .main-nav li {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+    
+    .sidebar .logout-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+    }
+
+    .sidebar .main-nav a,
+    .sidebar .logout-section .btn-logout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        justify-content: flex-start; 
+
+        padding-top: 12px; 
+        
+        text-decoration: none;
+        background: transparent !important;
+        color: #636e72 !important;
+        font-size: 0.70rem;
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .sidebar .main-nav a i,
+    .sidebar .logout-section .btn-logout i {
+        font-size: 1.4rem;
+        
+        margin-bottom: 2px; 
+        
+        color: #636e72;
+    }
+    
+    .sidebar .main-nav a.active,
+    .sidebar .main-nav a.active i {
+        color: var(--accent-color, #6c5ce7) !important;
+        font-weight: bold;
+    }
+
+    .sidebar .logout-section .btn-logout span {
+        display: inline !important; 
+    }
+}

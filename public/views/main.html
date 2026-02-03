@@ -24,25 +24,35 @@
                 
                 <div class="user-profile">
                     <div class="avatar-circle">
-                        <?= strtoupper(substr($_SESSION['nickname'], 0, 1)) ?>
+                        <?= strtoupper(substr($_SESSION['nickname'] ?? 'U', 0, 1)) ?>
                     </div>
-                    <h3><?= $_SESSION['nickname'] ?></h3>
+                    <h3><?= $_SESSION['nickname'] ?? 'User' ?></h3>
                 </div>
 
                 <nav class="main-nav">
                     <ul>
-                        <li><a href="/dashboard"><i class="fa-solid fa-guitar"></i> Your Tabs</a></li>
-                        <li><a href="/library"><i class="fa-solid fa-book-open"></i> Chords Library</a></li>
+                        <li>
+                            <a href="/library" class="<?= (isset($page) && $page == 'library') ? 'active' : '' ?>">
+                                <i class="fa-solid fa-book-open"></i> <span class="nav-text">Library</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/songs" class="<?= (isset($page) && ($page == 'songs' || $page == 'add_song')) ? 'active' : '' ?>">
+                                <i class="fa-solid fa-music"></i> <span class="nav-text">Songs</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
 
                 <div class="logout-section">
-                    <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    <a href="/logout" class="btn-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                    </a>
                 </div>
 
             <?php else: ?>
 
-                <div class="login-mini-form">
+                <div class="login-mini-form desktop-only">
                     <h3>Welcome Back</h3>
                     <p>Sign in to access your tabs.</p>
                     
@@ -58,6 +68,23 @@
                         <span>New here?</span> <a href="/register">Create an account</a>
                     </div>
                 </div>
+
+                <nav class="mobile-guest-nav">
+                    <ul>
+                        <li>
+                            <a href="/login">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                <span>Login</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/register">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Join</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
             <?php endif; ?>
         </div>

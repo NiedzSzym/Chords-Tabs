@@ -1,4 +1,4 @@
-/* Kontener na etykiety */
+
 .badges-container {
     margin-bottom: 25px;
 }
@@ -14,21 +14,19 @@
     letter-spacing: 0.5px;
 }
 
-/* Styl dla akordów systemowych (Szary/Neutralny) */
 .badge.system {
     background-color: #dfe6e9;
     color: #636e72;
     border: 1px solid #b2bec3;
 }
 
-/* Styl dla akordów prywatnych (Twój kolor akcentowy/Brąz) */
+
 .badge.private {
-    background-color: rgba(175, 143, 111, 0.15); /* Jasny brąz */
-    color: var(--sidebar-bg); /* Ciemny brąz */
+    background-color: rgba(175, 143, 111, 0.15);
+    color: var(--sidebar-bg);
     border: 1px solid var(--accent-color);
 }
 
-/* Przycisk usuwania - niech będzie czerwony i wyraźny */
 .btn-delete {
     background-color: #fff;
     color: #ff7675;

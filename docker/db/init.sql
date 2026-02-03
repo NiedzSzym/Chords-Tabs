@@ -49,7 +49,10 @@ CREATE TABLE songs (
     tuning_id INTEGER NOT NULL REFERENCES tunings(id),
     author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     artist_name VARCHAR(100),
-    song_text TEXT NOT NULL
+    time_signature VARCHAR(10) DEFAULT '4/4',
+    tempo INTEGER DEFAULT 120,
+    song_text TEXT NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE chords (
@@ -68,8 +71,18 @@ CREATE TABLE chords_for_songs (
     PRIMARY KEY (song_id, chord_id)
 );
 
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_song_timestamp
+BEFORE UPDATE ON songs
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
+
 INSERT INTO roles (name) VALUES ('admin');
 INSERT INTO roles (name) VALUES ('user');
-INSERT INTO instrument_types (name, string_count) VALUES ('Guitar', 6);
-INSERT INTO instrument_types (name, string_count) VALUES ('Ukulele', 4);
-INSERT INTO tunings (tuning, instrument_type_id) VALUES ('E Standard', 1);

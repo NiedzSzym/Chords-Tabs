@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="/styles/add_song.css">
+
+<div class="creator-container">
+    <div class="creator-header">
+        <h1>Add New Song</h1>
+        <a href="/songs" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Cancel
+        </a>
+    </div>
+
+    <?php if(isset($messages)): ?>
+        <div class="messages">
+            <?php foreach($messages as $msg): ?>
+                <div class="alert"><?= $msg ?></div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="/add-song" method="POST" class="song-form">
+        
+        <div class="meta-data-row">
+            <div class="input-group">
+                <label>Song Title</label>
+                <input type="text" name="name" placeholder="e.g. Wonderwall" required>
+            </div>
+            <div class="input-group">
+                <label>Artist</label>
+                <input type="text" name="artist_name" placeholder="e.g. Oasis">
+            </div>
+        </div>
+
+        <div class="settings-grid">
+            
+            <div class="input-group">
+                <label>Instrument</label>
+                <select name="instrument_type_id" id="instrumentSelect" required>
+                    <?php foreach($instruments as $instr): ?>
+                        <option value="<?= $instr['id'] ?>"><?= $instr['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Tuning</label>
+                <select name="tuning_id" id="tuningSelect" required>
+                    <option value="" disabled selected>Select instrument first...</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Key</label>
+                <select name="key_id">
+                    <option value="">Unknown</option>
+                    <?php foreach($keys as $key): ?>
+                        <option value="<?= $key['id'] ?>">
+                            <?= $key['key_name'] ?> <?= ucfirst($key['key_mode']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Capo</label>
+                <input type="number" name="capo_fret" value="0" min="0" max="12">
+            </div>
+
+            <div class="input-group">
+                <label>Tempo (BPM)</label>
+                <input type="number" name="tempo" value="120" min="40" max="300">
+            </div>
+
+            <div class="input-group">
+                <label>Time Sig.</label>
+                <select name="time_signature">
+                    <option value="4/4" selected>4/4</option>
+                    <option value="3/4">3/4</option>
+                    <option value="2/4">2/4</option>
+                    <option value="6/8">6/8</option>
+                    <option value="12/8">12/8</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="editor-area">
+            <label>Lyrics & Chords</label>
+            <p class="hint">Use square brackets for chords: <code>Today is [Em]gonna be the day...</code></p>
+            <textarea name="song_text" placeholder="Paste your lyrics here..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-save-song">
+            <i class="fa-solid fa-floppy-disk"></i> Save Song
+        </button>
+    </form>
+</div>
+
+<script src="/scripts/song_editor.js"></script>

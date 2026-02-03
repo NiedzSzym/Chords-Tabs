@@ -1,13 +1,10 @@
 
-
-/* Nagłówek sekcji */
 .dashboard-content h1 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: var(--sidebar-bg); /* Spójny ciemny kolor */
+    color: var(--sidebar-bg);
 }
 
-/* Pasek wyszukiwania */
 .search-bar {
     display: flex;
     gap: 10px;
@@ -17,7 +14,6 @@
 
 .search-bar input {
     flex: 1;
-    /* Styl bazowy bierze z base.css, tu ewentualne poprawki */
     background: var(--white);
 }
 
@@ -35,15 +31,12 @@
     background-color: var(--accent-color);
 }
 
-/* --- GRID KAFELKÓW --- */
 .songs-grid {
     display: grid;
-    /* Responsywność: min 240px, max ile wlezie */
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 25px;
 }
 
-/* Karta utworu */
 .card {
     background: var(--white);
     border-radius: 12px;
@@ -91,7 +84,7 @@
 .btn-details {
     display: block;
     text-align: center;
-    background-color: var(--bg-color); /* Jasne tło */
+    background-color: var(--bg-color);
     color: var(--sidebar-bg);
     padding: 10px;
     border-radius: 6px;

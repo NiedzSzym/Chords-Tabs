@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/styles/song_view.css">
+
+<div class="song-view-container">
+    
+    <div class="song-header-nav">
+        <a href="/songs" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+        </a>
+        
+        <?php if(isset($song['author_id']) && $song['author_id'] == $_SESSION['user_id']): ?>
+            <?php endif; ?>
+    </div>
+
+    <div class="song-sheet">
+        
+        <header class="sheet-header">
+            <h1><?= $song['name'] ?></h1>
+            <h2 class="artist"><?= $song['artist_name'] ?? 'Unknown Artist' ?></h2>
+            
+            <div class="meta-badges">
+                <?php if(!empty($song['key_name'])): ?>
+                    <span class="meta-badge" title="Key">
+                        <i class="fa-solid fa-music"></i> 
+                        <?= $song['key_name'] ?> <?= ucfirst($song['key_mode'] ?? '') ?>
+                    </span>
+                <?php endif; ?>
+                
+                <span class="meta-badge" title="Tempo">
+                    <i class="fa-solid fa-clock"></i> <?= $song['tempo'] ?> BPM
+                </span>
+                
+                <span class="meta-badge" title="Time Signature">
+                    <i class="fa-solid fa-hourglass-half"></i> <?= $song['time_signature'] ?>
+                </span>
+
+                <?php if(!empty($song['capo_fret']) && $song['capo_fret'] > 0): ?>
+                    <span class="meta-badge highlight" title="Capo">
+                        Capo: <?= $song['capo_fret'] ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+
+            <div class="instrument-info">
+                <small>
+                    <?= $song['instrument_name'] ?? 'Instrument' ?> 
+                    (<?= $song['tuning'] ?? 'Standard' ?>)
+                </small>
+            </div>
+        </header>
+
+        <hr class="divider">
+
+        <div class="lyrics-content">
+            <?= $formattedText ?? 'No text available.' ?>
+        </div>
+
+    </div>
+</div>

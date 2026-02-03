@@ -12,8 +12,7 @@ class SecurityController extends AppController {
     #[AllowedMethods(['POST', 'GET'])]
     public function login() {
         if ($this->isGet()) {
-            header("Location: /dashboard");
-            exit;
+            return $this->renderStandalone('login');
         }
 
         if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {

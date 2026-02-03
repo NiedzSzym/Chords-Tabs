@@ -5,6 +5,7 @@ require_once __DIR__ . '/../src/attributes/Options.php';
 require_once __DIR__ . '/../src/middleware/CheckRequestAllowed.php';
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
 require_once __DIR__ . '/../src/controllers/ChordController.php';
+require_once __DIR__ . '/../src/controllers/SongController.php';
 
 class Routing {
     public static $routes = [
@@ -43,7 +44,20 @@ class Routing {
         'api-get-tunings' => [
             'controller' => 'ChordController',
             'action' => 'getTuningsApi'
+        ],
+        'songs' => [
+            'controller' => 'SongController',
+            'action' => 'songs'
+        ],
+        'add-song' => [
+            'controller' => 'SongController',
+            'action' => 'addSong'
+        ],
+        'song' => [
+            'controller' => 'SongController',
+            'action' => 'viewSong'
         ]
+
 
     ];
 

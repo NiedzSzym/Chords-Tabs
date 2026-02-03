@@ -6,8 +6,6 @@ require_once __DIR__.'/../model/Chord.php';
 class ChordRepository extends Repository {
     public function getChords(int $userId): array
     {
-        // Pobieramy akordy, które są MOJE (author_id = :id)
-        // LUB są GLOBALNE (author_id IS NULL)
         $stmt = $this->database->connect()->prepare('
             SELECT c.*, 
                    it.name as instrument_name, 

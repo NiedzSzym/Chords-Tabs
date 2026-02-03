@@ -68,7 +68,6 @@
 .btn-logout { color: var(--danger); }
 .btn-logout:hover { background: var(--danger-bg); }
 
-/* Formularz logowania w sidebarze */
 .login-mini-form input {
     width: 100%;
     background: rgba(255,255,255,0.05);
@@ -92,7 +91,6 @@
 .mobile-guest-nav { display: none; }
 
 
-/* --- WERSJA MOBILNA (Bottom Bar) --- */
 @media (max-width: 768px) {
     
     .sidebar {
@@ -101,7 +99,7 @@
         left: 0;
         top: auto;
         width: 100%;
-        height: 60px; /* Stała wysokość paska */
+        height: 60px;
         
         background-color: white !important;
         background: white !important;
@@ -118,25 +116,20 @@
         box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
     }
 
-    /* Ukrywamy elementy desktopowe */
     .sidebar .logo,
     .sidebar .user-profile,
     .desktop-only {
         display: none !important;
     }
 
-    /* Kontener główny w pasku */
     .sidebar .auth-section {
         width: 100%;
         height: 100%;
-        flex-direction: row; /* Zmiana na poziom */
+        flex-direction: row;
         align-items: center;
         justify-content: space-between;
     }
 
-    /* --- ZALOGOWANY --- */
-    
-    /* Menu (Library, Songs, Profile) - zajmuje 3/4 paska */
     .sidebar .main-nav {
         flex: 3; 
         height: 100%;
@@ -162,7 +155,7 @@
         margin: 0;
     }
     
-    /* Logout - zajmuje 1/4 paska */
+
     .sidebar .logout-section {
         flex: 1;
         height: 100%;
@@ -173,11 +166,10 @@
         border-left: 1px solid #eee;
     }
 
-    /* Wygląd linków na mobilu */
     .sidebar .main-nav a,
     .sidebar .logout-section .btn-logout {
-        flex-direction: column; /* Ikona nad tekstem */
-        justify-content: center; /* Wyśrodkowanie góra-dół */
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
         padding: 0;
         margin: 0;
@@ -187,7 +179,7 @@
         width: 100%;
         height: 100%;
         border-radius: 0;
-        transform: none !important; /* Wyłącz animację przesunięcia */
+        transform: none !important;
     }
 
     .sidebar .main-nav a i,
@@ -211,7 +203,6 @@
          color: var(--accent-color, #6c5ce7) !important;
     }
 
-    /* --- NIEZALOGOWANY (Guest) --- */
     .mobile-guest-nav {
         display: block !important;
         width: 100%;

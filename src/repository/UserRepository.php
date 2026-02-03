@@ -57,8 +57,6 @@ class UserRepository extends Repository {
     }
 
     public function getUserDetailsById(int $id) {
-        // Używamy JOIN, aby połączyć tabelę użytkowników z profilami i rolami
-        // Jeśli masz widok 'auth_users_view', możesz go użyć, ale JOIN jest pewniejszy na start
         $stmt = $this->database->connect()->prepare('
             SELECT 
                 u.email, 
@@ -74,8 +72,6 @@ class UserRepository extends Repository {
         $stmt->execute();
         
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Jeśli profil nie istnieje (np. stary user), zwracamy same dane z users
         if (!$user) {
             return null;
         }

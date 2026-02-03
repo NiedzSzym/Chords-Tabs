@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/styles/add_chord.css">
+
+<div class="add-chord-container">
+    <div class="form-header">
+        <h1>Add New Chord</h1>
+        <a href="/library" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+
+    <?php if(isset($messages)): ?>
+        <?php endif; ?>
+
+    <form action="/add-chord" method="POST" class="chord-form">
+        
+        <div class="input-group">
+            <label>Chord Name</label>
+            <input type="text" name="name" placeholder="e.g. C Major" required>
+        </div>
+
+        <div class="row" style="display: flex; gap: 20px; margin-bottom: 20px;">
+            <div class="input-group" style="flex: 1;">
+                <label>Instrument</label>
+                <select name="instrument_id" id="instrumentSelect" required>
+                    <?php foreach($instruments as $instr): ?>
+                        <option value="<?= $instr['id'] ?>" data-strings="<?= $instr['string_count'] ?>">
+                            <?= $instr['name'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="input-group" style="flex: 1;">
+                <label>Tuning</label>
+                <select name="tuning_id" id="tuningSelect" required>
+                    <option value="" disabled selected>Select instrument...</option>
+                </select>
+            </div>
+        </div>
+
+        <input type="hidden" name="string_count" id="stringCountInput" value="6">
+
+        <div class="fretboard-inputs">
+            <h3>Finger Placement</h3>
+            <p class="hint">Select fret (X = muted, 0 = open)</p>
+            
+            <div class="strings-row" id="stringsContainer"></div>
+        </div>
+
+        <button type="submit" class="btn-save">Save Chord</button>
+    </form>
+</div>
+
+<script src="/scripts/add_chord_logic.js"></script>

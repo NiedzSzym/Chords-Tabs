@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    <p>Your email is <?= htmlspecialchars($email); ?></p>
-    <a href="/logout">Logout</a>
-</body>
-</html>
+<div class="dashboard-wrapper">
+    <aside>
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="#">Ostatnie</a></li>
+            <li><a href="#">Ulubione</a></li>
+        </ul>
+    </aside>
+
+    <main class="dashboard-content">
+        <h1>Twoje Utwory</h1>
+        <div class="songs-grid">
+            </div>
+    </main>
+</div>

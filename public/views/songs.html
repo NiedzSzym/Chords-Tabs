@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="/styles/library.css">
+
+<div class="library-container">
+    <div class="library-header">
+        <h1>My Songs</h1>
+        <a href="/add-song" class="btn-add">
+            <i class="fa-solid fa-plus"></i> Add New Song
+        </a>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search song...">
+        <button><i class="fa-solid fa-search"></i></button>
+    </div>
+
+    <div class="chords-grid">
+        <?php if(empty($songs)): ?>
+            <div style="grid-column: 1/-1; text-align: center; color: #b2bec3; margin-top: 50px;">
+                <p>You haven't created any songs yet.</p>
+                <a href="/add-song" style="color: var(--accent-color); font-weight: bold;">Create your first song</a>
+            </div>
+        <?php else: ?>
+            <?php foreach($songs as $song): ?>
+                <div class="chord-card user-card" style="align-items: flex-start; min-height: 180px;">
+                    <div class="card-badges">
+                        <span class="badge private"><?= $song['time_signature'] ?? '4/4' ?></span>
+                        <span class="badge system"><?= $song['tempo'] ?? '120' ?> BPM</span>
+                    </div>
+                    
+                    <h3 style="margin-top: 10px; font-size: 1.2rem;"><?= $song['name'] ?></h3>
+                    <p style="margin: 0 0 20px 0; color: #636e72; font-style: italic; font-size: 0.9rem;">
+                        <?= $song['artist_name'] ?: 'Unknown Artist' ?>
+                    </p>
+
+                    <div class="card-actions" style="margin-top: auto;">
+                        <a href="/song?id=<?= $song['id'] ?>" class="btn-view" style="text-decoration: none; color: var(--accent-color); font-weight: 600; font-size: 0.9rem;">
+                            View Song <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>

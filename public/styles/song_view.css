@@ -1,0 +1,107 @@
+.song-view-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.song-header-nav {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-back {
+    text-decoration: none;
+    color: #636e72;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+
+.btn-back:hover {
+    color: #2d3436;
+}
+
+.song-sheet {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+}
+
+.sheet-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sheet-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+    color: #2d3436;
+}
+
+.sheet-header .artist {
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+    color: #636e72;
+    font-weight: 400;
+}
+
+.meta-badges {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.meta-badge {
+    background: #f1f2f6;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #2d3436;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.meta-badge.highlight {
+    background: #ffeaa7;
+    color: #d35400;
+}
+
+.instrument-info {
+    color: #b2bec3;
+    font-size: 0.85rem;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #f1f2f6;
+    margin: 30px 0;
+}
+
+.lyrics-content {
+
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    line-height: 2.5;
+    white-space: pre-wrap;
+    color: #2d3436;
+}
+
+
+.chord {
+    color: var(--accent-color, #6c5ce7);
+    font-weight: bold;
+    cursor: pointer;
+    background: rgba(108, 92, 231, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin: 0 2px;
+    
+
+}

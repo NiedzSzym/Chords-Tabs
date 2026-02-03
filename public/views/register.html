@@ -3,21 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejestracja</title>
+    <title>Sign Up - ChordManager</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/register.css">
 </head>
 <body>
-    <form action="register" method="POST">
+
+    <div class="form-card">
+        <h1>Join Us</h1>
+        
         <div class="messages">
             <?php if(isset($messages)) {
-                foreach($messages as $message) { echo $message; }
+                foreach($messages as $message) { 
+                    echo '<div class="alert">'. $message .'</div>'; 
+                }
             } ?>
         </div>
-        <input type="hidden" name="csrf" value="<?= $_SESSION['csrf']; ?>">
-        <input name="email" type="email" placeholder="email@email.com" required>
-        <input name="password1" type="password" placeholder="hasło" required>
-        <input name="password2" type="password" placeholder="powtórz hasło" required>
-        <input name="nickname" type="text" placeholder="twój pseudonim" required>
-        <button type="submit">Zarejestruj się</button>
-    </form>
+
+        <form action="register" method="POST">
+            <input type="hidden" name="csrf" value="<?= $csrf ?? '' ?>">
+
+            <input class="form-input" name="email" type="email" placeholder="Email" required>
+            <input class="form-input" name="nickname" type="text" placeholder="Username" required>
+            <input class="form-input" name="password1" type="password" placeholder="Password" required>
+            <input class="form-input" name="password2" type="password" placeholder="Confirm Password" required>
+            
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+
+        <div class="link-text">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+
 </body>
 </html>

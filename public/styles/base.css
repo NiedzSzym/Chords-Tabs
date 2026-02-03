@@ -1,0 +1,26 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { 
+    background-color: var(--bg-color); 
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+input {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 6px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--accent-color);
+}
+
+.alert {
+    background: #ff7675;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,33 @@
+
+.main-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+
+.content-area {
+    flex: 1;
+    padding: 3rem;
+    overflow-y: auto; 
+    background-color: var(--bg-color);
+}
+
+
+.sidebar {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        display: block; 
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding-bottom: 90px; 
+    }
+}
